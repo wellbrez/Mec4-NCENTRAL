@@ -10,6 +10,8 @@ function retangulo(x1,y1,x2,y2)
 	{
 		
 		push();
+		
+		fill(0,0,0,100);
 		rect(x1,y1,x2-x1,y2-y1);
 		strokeWeight(2/escala);
 		stroke(255);

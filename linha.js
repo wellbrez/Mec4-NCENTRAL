@@ -62,12 +62,14 @@ function linha(x1,y1,x2,y2)
 
 
 		push();
-		strokeWeight(1);
+
 		translate(xbarra,ybarra);
+
+		strokeWeight(1/escala);
 		point(this.a,this.b);
+		textoposicional('('+(Math.round(this.a*100)/100)+' , '+(Math.round(this.b*100)/100)+")",this.a,this.b,12,1);
 
 		pop();
-		console.log(this.a,this.b);
 
 	}
 }

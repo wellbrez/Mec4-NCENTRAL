@@ -14,37 +14,9 @@ var pontosremovidos = [];
 var escala=1;
 var desx=0;
 var desy=0;
+var angulo = 0;
 
-function textofixo(texto,x,y,tamanho,grossura)
-{
-	push();
-	textSize(tamanho);
-	strokeWeight(grossura);
-	text(texto,x,y);
-	pop();
-}
-function textoposicional(texto,x,y,tamanho,grossura)
-{
-	push();
-	textSize(tamanho/escala);
-	strokeWeight(grossura/escala);
-	text(texto,x,y);
-	pop();
-}
 
-function arredonda20(n) // arredonda um numero n para uma base m. ex: arred(134,10 = 130)
-{
-	return Math.ceil(n/20/escala)*20/escala;
-}
-function arredonda(n) // arredonda um numero n para uma base m. ex: arred(134,10 = 130)
-{
-	return Math.ceil(n/10/escala)*10/escala;
-}
-function MX()
-{
-	return Math.round(mouseX-x/escala+)
-}
-function MY()
 
 function setup()
 {
@@ -58,18 +30,7 @@ function setup()
 
 
 }
-function eixoscentrais()
-{
-	push();
-	stroke('black');
-	strokeWeight(1);
-	translate(desx,desy);
-	line(width/2*escala,-desy,width/2*escala,height-desy);
-	line(-desx,height/2*escala,width-desx,height/2*escala);
 
-
-	pop();
-}
 function draw()
 {
 	if (tela=='desenhar')
@@ -87,32 +48,40 @@ function draw()
 		textofixo("Iy = "+Iy,width*0.8,height*0.95,20,1);  //IX TXT
 		if (status=='drawingrec')
 		{
+			push();
 			stroke('black');
 			textofixo("("+(-width/2 + arredonda(memorypoints[0]))+","+(+height/2 - arredonda(memorypoints[1]))+")",arredonda(memorypoints[0])-10,arredonda(memorypoints[1])-30,20,1);
-			textofixo("X1="+(+arredonda(memorypoints[0])-width/2),10,10,12,1);
-			textofixo("Y1="+(-arredonda(memorypoints[1])+height/2),10,30,12,1);
-			textofixo("LARGURA="+arredonda(mouseX-memorypoints[0]),10,50,12,1);
-			textofixo("ALTURA="+arredonda(mouseY-memorypoints[1]),10,70,12,1);
+			textofixo("X1="+((memorypoints[0])-width/2),10,10,12,1);
+			textofixo("Y1="+(-(memorypoints[1])+height/2),10,30,12,1);
+			textofixo("LARGURA="+(MX()-memorypoints[0]),10,50,12,1);
+			textofixo("ALTURA="+(MY()-memorypoints[1]),10,70,12,1);
 			stroke('red');
 			textofixo("RETANGULO",10,90,15,2);
+			pop();
 		}
-
+		else if (status =='drawingline')
+		{
+			push();
+			textofixo("X1="+(memorypoints[0]-width/2),10,10,12,1);
+			textofixo("Y1="+(-memorypoints[1]+height/2),10,30,12,1);
+			textofixo("X2="+(MX()-width/2),10,50,12,1);
+			textofixo("Y2="+(-MY()+height/2),10,70,12,1);
+			stroke('red');
+			textofixo("CONTORNO",10,90,15,2);
+			pop();
+		}
+		
 		scale(escala);
 		translate(desx/escala,desy/escala);
-		stroke(0,0,0);								//linhas pretas
-		strokeWeight(2/escala);						//linhas grossura 2
-		fill(0,0,0,150);						//fundo preto opacidade 150/255
-		
-		line(arredonda(mouseX)-20/escala,arredonda(mouseY),arredonda(mouseX)+20/escala,arredonda(mouseY));		//cross
-		line(arredonda(mouseX),arredonda(mouseY)+20/escala,arredonda(mouseX),arredonda(mouseY)-20/escala);		//cross
+		cross();
+		push();
+			translate(xbarra,ybarra);
+			rotate(angulo);
+			translate(-xbarra,-ybarra);
 
-			strokeWeight(1/escala);		//linha grossura 1
-			textSize(12/escala);	
-			text("("+(-width/2 + arredonda(mouseX))+","+(+height/2 - arredonda(mouseY))+")",arredonda(mouseX)+5/escala,arredonda(mouseY)-10/escala);
 
 		for (i=0;i<retangulos.length;i++) //desenhando retangulos, pegando area total, pegando somatorio Xbarra.Area e Ybarra.Area
 		{
-
 			retangulos[i].draw();
 
 		}
@@ -132,6 +101,7 @@ function draw()
 			push();
 			if (i!=0)
 			{
+				rotate(-angulo);
 				translate(xbarra,ybarra);
 				line(linhas[i-1].a,linhas[i-1].b,linhas[i].a,linhas[i].b);
 			}
@@ -141,18 +111,20 @@ function draw()
 				line(linhas[linhas.length-1].a,linhas[linhas.length-1].b,linhas[i].a,linhas[i].b);
 			}
 			pop();
+			pop();
 		}
 
 		push();						//PONTO VERMELHO CENTROIDE
-		strokeWeight(4/escala);		//PONTO VERMELHO CENTROIDE
-		stroke('red');				//PONTO VERMELHO CENTROIDE
-		point(xbarra,ybarra);		//PONTO VERMELHO CENTROIDE
+		strokeWeight(1/escala);		//PONTO VERMELHO CENTROIDE
+		stroke('green');				//PONTO VERMELHO CENTROIDE
+		point(xbarra,ybarra);
+		line(xbarra+100,ybarra,xbarra-100/escala,ybarra);
+		line(xbarra,ybarra+100,xbarra,ybarra-100/escala);		//PONTO VERMELHO CENTROIDE
 		pop();						//PONTO VERMELHO CENTROIDE
 
+		stroke('black');
 
 		
-		pop();
-		pop();
 
 	
 		if (status=='drawingrec')
@@ -161,53 +133,32 @@ function draw()
 			rect(
 			memorypoints[0],
 			memorypoints[1],
-			arredonda(mouseX)-memorypoints[0],
-			arredonda(mouseY)-memorypoints[1])
-			push();
-
-			strokeWeight(1);
-			stroke(0);
-			textSize(12);
-			translate(20,20);
-
-			stroke('black');
-			
-			pop();
+			MX()-memorypoints[0],
+			MY()-memorypoints[1]);
 		}
 		else if (status =='drawingline')
 		{
 
 			push();
-			fill(0,0,0,0);
 			strokeWeight(1/escala);
-			line(memorypoints[0],memorypoints[1],arredonda(mouseX),arredonda(mouseY));
-			translate(-desx/escala,-desy/escala);
-			scale(1/escala);
-			strokeWeight(1);
-			stroke(0);
-			textSize(20);
-			translate(20,20);
-			text("X1="+(arredonda(memorypoints[0])-width/2),10,10);
-			text("Y1="+(-arredonda(memorypoints[1])+height/2),10,30);
-			text("X2="+arredonda(mouseX-width/2),10,50);
-			text("Y2="+(-arredonda(mouseY+height/2),10,70));
+			line(memorypoints[0],memorypoints[1],MX(),MY());
 			pop();
 		}
 		else if(status =='drawingtristart')
 		{
 
-			line(memorypoints[0],memorypoints[1],arredonda(mouseX),memorypoints[1]);
+			line(memorypoints[0],memorypoints[1],MX(),memorypoints[1]);
 		}
-			else if(status =='drawingtriend')
+		else if(status =='drawingtriend')
 		{
-			if (Math.abs(arredonda(mouseX)-memorypoints[0])>Math.abs(arredonda(mouseX)-memorypoints[2]))
+			if (Math.abs(MX()-memorypoints[0])>Math.abs(MX()-memorypoints[2]))
 			{
 
-			triangle(memorypoints[0],memorypoints[1],memorypoints[2],memorypoints[3],memorypoints[2],arredonda(mouseY));
+				triangle(memorypoints[0],memorypoints[1],memorypoints[2],memorypoints[3],memorypoints[2],MY());
 			}
 			else
 			{
-				triangle(memorypoints[0],memorypoints[1],memorypoints[2],memorypoints[3],memorypoints[0],arredonda(mouseY));
+				triangle(memorypoints[0],memorypoints[1],memorypoints[2],memorypoints[3],memorypoints[0],MY());
 			}
 		}
 	}
@@ -219,12 +170,12 @@ function keyPressed()
 	{
 		if (status == 'notdrawing')
 		{
-			memorypoints = [arredonda(mouseX),arredonda(mouseY)];
+			memorypoints = [MX(),MY()];
 			status = 'drawingrec';
 		}
 		else if (status == 'drawingrec')
 		{
-			retangulos.push(new retangulo(memorypoints[0],memorypoints[1],arredonda(mouseX),arredonda(mouseY)));
+			retangulos.push(new retangulo(memorypoints[0],memorypoints[1],MX(),MY()));
 			historico.push('retangulo');
 			status = 'notdrawing';
 		}
@@ -262,12 +213,12 @@ function keyPressed()
 	{
 		if (status == 'notdrawing')
 		{
-			memorypoints = [arredonda(mouseX),arredonda(mouseY)];
+			memorypoints = [MX(),MY()];
 			status = 'drawingline';
 		}
 		else if (status=='drawingline')
 		{
-			linhas.push(new linha(memorypoints[0],memorypoints[1],arredonda(mouseX),arredonda(mouseY)));
+			linhas.push(new linha(memorypoints[0],memorypoints[1],MX(),MY()));
 
 			historico.push('linha');
 			status='notdrawing';
@@ -298,10 +249,15 @@ function keyPressed()
 		escala = 1;
 		desx=0;
 		desy=0;
+		angulo = 0;
 	}
 	if(key=='+')
 	{
 		escala+=0.1;
+	}
+	if(key=='*')
+	{
+		angulo+=0.1;
 	}
 	if(key=='-')
 	{
@@ -311,32 +267,32 @@ function keyPressed()
 	{
 		if(status=='notdrawing')
 		{
-			memorypoints = [arredonda(mouseX),arredonda(mouseY)];
+			memorypoints = [MX(),MY()];
 			status = 'drawingtristart'
 		}
 		else if(status=='drawingtristart')
 		{
-			if (Math.abs(memorypoints[0]-arredonda(mouseX))>Math.abs(memorypoints[1]-arredonda(mouseY)))
+			if (Math.abs(memorypoints[0]-MX())>Math.abs(memorypoints[1]-MY()))
 			{
-				memorypoints.push(arredonda(mouseX));
+				memorypoints.push(MX());
 				memorypoints.push(memorypoints[1]);
 			}
 			else
 			{
 				memorypoints.push(memorypoints[0]);
-				memorypoints.push(arredonda(mouseY));
+				memorypoints.push(MY());
 			}
 			status = 'drawingtriend';
 		}
 		else if(status=='drawingtriend')
 		{
-			if (Math.abs(arredonda(mouseX)-memorypoints[0])>Math.abs(arredonda(mouseX)-memorypoints[2]))
+			if (Math.abs(MX()-memorypoints[0])>Math.abs(MX()-memorypoints[2]))
 			{
-				triangulos.push(new triangulo(memorypoints[0],memorypoints[1],memorypoints[2],memorypoints[3],memorypoints[2],arredonda(mouseY)));
+				triangulos.push(new triangulo(memorypoints[0],memorypoints[1],memorypoints[2],memorypoints[3],memorypoints[2],MY()));
 			}
 			else
 			{
-				triangulos.push(new triangulo(memorypoints[0],memorypoints[1],memorypoints[2],memorypoints[3],memorypoints[0],arredonda(mouseY)));
+				triangulos.push(new triangulo(memorypoints[0],memorypoints[1],memorypoints[2],memorypoints[3],memorypoints[0],MY()));
 			}
 			
 

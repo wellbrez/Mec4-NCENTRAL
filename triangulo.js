@@ -9,8 +9,10 @@ function triangulo(x1,y1,x2,y2,x3,y3)
 	this.area = Math.abs((x2-x1)*(y3-y2)/2);
 	this.draw = function()
 	{
-		triangle(x1,y1,x2,y2,x3,y3);
+		
 		push();
+		fill(0,0,0,100);
+		triangle(x1,y1,x2,y2,x3,y3);
 		strokeWeight(2/escala);
 		stroke(255);
 		point(this.xbarra,this.ybarra);

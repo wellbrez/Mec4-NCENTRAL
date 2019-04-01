@@ -1,3 +1,20 @@
+
+function arredonda20(n) // arredonda um numero n para uma base m. ex: arred(134,10 = 130)
+{
+	return Math.ceil(n/20/escala)*20/escala;
+}
+function arredonda(n) // arredonda um numero n para uma base m. ex: arred(134,10 = 130)
+{
+	return Math.ceil(n/10/escala)*10/escala;
+}
+function MX()
+{
+	return Math.round(((mouseX-desx)/escala)/10)*10;
+}
+function MY()
+{
+	return (Math.round(((mouseY-desy)/escala)/10)*10);
+}
 function calcularcentroide()
 {
 	areatotal=0;
