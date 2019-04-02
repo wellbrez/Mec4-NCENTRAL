@@ -43,10 +43,12 @@ function calcularinercia()
 
 		Ix=0;
 		Iy=0;
+		Ixy = 0;
 		for (i=0;i<retangulos.length;i++)  //TEOREMA DOS EIXOS PARALELOS COM RETANGULOS
 		{
 			Ix +=retangulos[i].Ix+retangulos[i].area*(retangulos[i].ybarra-ybarra)**2; 
-			Iy +=retangulos[i].Iy+retangulos[i].area*(retangulos[i].xbarra-xbarra)**2; 
+			Iy +=retangulos[i].Iy+retangulos[i].area*(retangulos[i].xbarra-xbarra)**2;
+			Ixy +=retangulos[i].Ixy+retangulos[i].area*(retangulos[i].xbarra-xbarra)*(retangulos[i].ybarra-ybarra); 
 		}
 
 
@@ -54,5 +56,6 @@ function calcularinercia()
 		{
 			Ix +=triangulos[i].Ix+triangulos[i].area*(triangulos[i].ybarra-ybarra)**2;
 			Iy +=triangulos[i].Iy+triangulos[i].area*(triangulos[i].xbarra-xbarra)**2;
+			Ixy +=triangulos[i].Ixy+triangulos[i].area*(triangulos[i].xbarra-xbarra)*(triangulos[i].ybarra-ybarra);
 		}
 }

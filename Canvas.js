@@ -10,6 +10,7 @@ var somaYarea = 0;
 var historico = [];
 var Ix=0;
 var Iy=0;
+var Ixy=0;
 var pontosremovidos = [];
 var escala=1;
 var desx=0;
@@ -45,7 +46,8 @@ function draw()
 		textofixo("Y = "+Math.round((-ybarra+height/2)*100)/100,width*0.60,height*0.95,20,1);	//CENTROIDE TXT
 		textofixo("AreaTotal = "+areatotal,width*0.60,height,20,1);  //display area total
 		textofixo("Ix = "+Ix,width*0.8,height*0.9,20,1);  //IX TXT
-		textofixo("Iy = "+Iy,width*0.8,height*0.95,20,1);  //IX TXT
+		textofixo("Iy = "+Iy,width*0.8,height*0.95,20,1);
+		textofixo("Ixy = "+Ixy,width*0.4,height*0.95,20,1);  //IX TXT
 		if (status=='drawingrec')
 		{
 			push();
