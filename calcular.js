@@ -48,7 +48,7 @@ function calcularinercia()
 		{
 			Ix +=retangulos[i].Ix+retangulos[i].area*(retangulos[i].ybarra-ybarra)**2; 
 			Iy +=retangulos[i].Iy+retangulos[i].area*(retangulos[i].xbarra-xbarra)**2;
-			Ixy +=retangulos[i].Ixy+retangulos[i].area*(retangulos[i].xbarra-xbarra)*(retangulos[i].ybarra-ybarra); 
+			Ixy +=retangulos[i].Ixy+retangulos[i].area*(-xbarra+retangulos[i].xbarra)*(ybarra-retangulos[i].ybarra); 
 		}
 
 
@@ -56,6 +56,23 @@ function calcularinercia()
 		{
 			Ix +=triangulos[i].Ix+triangulos[i].area*(triangulos[i].ybarra-ybarra)**2;
 			Iy +=triangulos[i].Iy+triangulos[i].area*(triangulos[i].xbarra-xbarra)**2;
-			Ixy +=triangulos[i].Ixy+triangulos[i].area*(triangulos[i].xbarra-xbarra)*(triangulos[i].ybarra-ybarra);
+			Ixy +=triangulos[i].Ixy+triangulos[i].area*(-xbarra+triangulos[i].xbarra)*(ybarra-triangulos[i].ybarra);
 		}
+		Imed = (Ix+Iy)/2;
+		R = Math.sqrt(((Ix-Iy)/2)**2+Ixy**2);
+		Imax = Imed+R;
+		Imin = Imed-R;
+
+		angulo = Math.atan(-2*Ixy/(Iy-Ix))/2;
+		if (Ix>=Iy)
+		{
+			Ixnew = Imax;
+			Iynew = Imin;
+		}
+		else
+		{
+			Iynew=Imax;
+			Ixnew=Imin;
+		}
+
 }

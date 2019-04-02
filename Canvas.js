@@ -11,11 +11,17 @@ var historico = [];
 var Ix=0;
 var Iy=0;
 var Ixy=0;
+var Imed=0;
+var Imax=0;
+var Imin=0;
+var Ixnew=0;
+var Iynew=0;
 var pontosremovidos = [];
 var escala=1;
 var desx=0;
 var desy=0;
-var angulo = 0;
+var angulo = Math.PI/2;
+var final = false;
 
 
 
@@ -44,10 +50,12 @@ function draw()
 		textofixo("Centróide",width*0.60,height*0.85,20,1);      //CENTROIDE TXT
 		textofixo("X = "+Math.round((xbarra-width/2)*100)/100,width*0.60,height*0.9,20,1);      //CENTROIDE TXT
 		textofixo("Y = "+Math.round((-ybarra+height/2)*100)/100,width*0.60,height*0.95,20,1);	//CENTROIDE TXT
-		textofixo("AreaTotal = "+areatotal,width*0.60,height,20,1);  //display area total
-		textofixo("Ix = "+Ix,width*0.8,height*0.9,20,1);  //IX TXT
-		textofixo("Iy = "+Iy,width*0.8,height*0.95,20,1);
-		textofixo("Ixy = "+Ixy,width*0.4,height*0.95,20,1);  //IX TXT
+		textofixo("AreaTotal = "+Math.round(areatotal*100)/100,width*0.60,height,20,1);  //display area total
+		textofixo("Ix = "+Math.round(Ix*100)/100,width*0.8,height*0.9,20,1);  //IX TXT
+		textofixo("Iy = "+Math.round(Iy*100)/100,width*0.8,height*0.95,20,1);
+		textofixo("Ixrodado = "+Math.round(Ixnew*100)/100,width*0.4,height*0.95,20,1);  //IX TXT
+		textofixo("Iyrodado = "+Math.round(Iynew*100)/100,width*0.4,height*1,20,1);
+		textofixo("Ixy = "+Math.round(Ixy*100)/100,width*0.4,height*0.90,20,1);  //IX TXT
 		if (status=='drawingrec')
 		{
 			push();
@@ -77,9 +85,15 @@ function draw()
 		translate(desx/escala,desy/escala);
 		cross();
 		push();
-			translate(xbarra,ybarra);
-			rotate(angulo);
-			translate(-xbarra,-ybarra);
+			
+			if (final)
+			{
+				translate(xbarra,ybarra);
+				rotate(-angulo);
+				translate(-xbarra,-ybarra);
+			}
+			
+			
 
 
 		for (i=0;i<retangulos.length;i++) //desenhando retangulos, pegando area total, pegando somatorio Xbarra.Area e Ybarra.Area
@@ -94,16 +108,23 @@ function draw()
 
 
 
-
+		pop();
 		for (i=0;i<linhas.length;i++) //desenhando linhas
 		{
+			push();
+			if (final)
+			{
+				translate(xbarra,ybarra);
+				rotate(-angulo);
+				translate(-xbarra,-ybarra);
+			}
 			linhas[i].draw();
 			linhas[i].pointsbyline(xbarra,ybarra,Ix,Iy,areatotal);
-
+			pop();
 			push();
+			if (final){
 			if (i!=0)
 			{
-				rotate(-angulo);
 				translate(xbarra,ybarra);
 				line(linhas[i-1].a,linhas[i-1].b,linhas[i].a,linhas[i].b);
 			}
@@ -111,17 +132,32 @@ function draw()
 			{
 				translate(xbarra,ybarra);
 				line(linhas[linhas.length-1].a,linhas[linhas.length-1].b,linhas[i].a,linhas[i].b);
-			}
-			pop();
+			}}
 			pop();
 		}
 
 		push();						//PONTO VERMELHO CENTROIDE
 		strokeWeight(1/escala);		//PONTO VERMELHO CENTROIDE
-		stroke('green');				//PONTO VERMELHO CENTROIDE
-		point(xbarra,ybarra);
-		line(xbarra+100,ybarra,xbarra-100/escala,ybarra);
-		line(xbarra,ybarra+100,xbarra,ybarra-100/escala);		//PONTO VERMELHO CENTROIDE
+		if (!final)
+		{
+			stroke('green');
+		}
+		else
+		{
+			stroke('red');
+		}
+		translate(xbarra,ybarra);
+
+		line(100,0,-100,0);
+		line(0,100,0,-100);	
+
+		if (final)
+		{
+			stroke('green');
+			rotate(-angulo)
+			line(100,0,-100,0);
+			line(0,100,0,-100);	
+		}		//PONTO VERMELHO CENTROIDE
 		pop();						//PONTO VERMELHO CENTROIDE
 
 		stroke('black');
@@ -257,13 +293,13 @@ function keyPressed()
 	{
 		escala+=0.1;
 	}
-	if(key=='*')
-	{
-		angulo+=0.1;
-	}
 	if(key=='-')
 	{
 		escala-=0.1;
+	}
+	if(key=='f')
+	{
+		final= !final;
 	}
 	if (key=='t')
 	{

@@ -1,6 +1,7 @@
 function textofixo(texto,x,y,tamanho,grossura)
 {
 	push();
+	fill(0,0,0);
 	textSize(tamanho);
 	strokeWeight(grossura);
 	text(texto,x,y);
