@@ -63,16 +63,32 @@ function calcularinercia()
 		Imax = Imed+R;
 		Imin = Imed-R;
 
-		angulo = Math.atan(-2*Ixy/(Iy-Ix))/2;
-		if (Ix>=Iy)
+		
+		if (Ix>Iy)
 		{
+			angulo = Math.atan(-2*Ixy/(Iy-Ix))/2;
 			Ixnew = Imax;
 			Iynew = Imin;
 		}
-		else
+		else if(Iy>Ix)
 		{
+			angulo = Math.atan(-2*Ixy/(Iy-Ix))/2;
 			Iynew=Imax;
 			Ixnew=Imin;
+		}
+		else
+		{
+			angulo = Math.PI/4;
+			if (Ixy>0)
+			{
+				Ixnew = Imax;
+				Iynew = Imin;
+			}
+			else
+			{
+				Iynew = Imax;
+				Ixnew = Imin;
+			}
 		}
 
 }
