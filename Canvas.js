@@ -22,6 +22,7 @@ var desx=0;
 var desy=0;
 var angulo = Math.PI/2;
 var final = false;
+var invisi = false;
 
 
 
@@ -204,21 +205,7 @@ function draw()
 }
 function keyPressed()
 {
-	if (key=='r')
-	{
-		if (status == 'notdrawing')
-		{
-			memorypoints = [MX(),MY()];
-			status = 'drawingrec';
-		}
-		else if (status == 'drawingrec')
-		{
-			retangulos.push(new retangulo(memorypoints[0],memorypoints[1],MX(),MY()));
-			historico.push('retangulo');
-			status = 'notdrawing';
-		}
-
-	}
+	
 	//
 	//
 	if (key=='d')
@@ -301,6 +288,11 @@ function keyPressed()
 	{
 		final= !final;
 	}
+
+	if(key=='o')
+	{
+		invisi= !invisi;
+	}
 	if (key=='t')
 	{
 		if(status=='notdrawing')
@@ -327,16 +319,34 @@ function keyPressed()
 			if (Math.abs(MX()-memorypoints[0])>Math.abs(MX()-memorypoints[2]))
 			{
 				triangulos.push(new triangulo(memorypoints[0],memorypoints[1],memorypoints[2],memorypoints[3],memorypoints[2],MY()));
+				triangulos[triangulos.length-1].invisi = invisi;
 			}
 			else
 			{
 				triangulos.push(new triangulo(memorypoints[0],memorypoints[1],memorypoints[2],memorypoints[3],memorypoints[0],MY()));
+				triangulos[triangulos.length-1].invisi = invisi;
 			}
 			
 
 			historico.push('triangulo');
 			status='notdrawing';
 		}
+	}
+	if (key=='r')
+	{
+		if (status == 'notdrawing')
+		{
+			memorypoints = [MX(),MY()];
+			status = 'drawingrec';
+		}
+		else if (status == 'drawingrec')
+		{
+			retangulos.push(new retangulo(memorypoints[0],memorypoints[1],MX(),MY()));
+			retangulos[retangulos.length-1].invisi = invisi;
+			historico.push('retangulo');
+			status = 'notdrawing';
+		}
+
 	}
 	calcularcentroide();
 	calcularinercia();

@@ -22,16 +22,30 @@ function calcularcentroide()
 	somaYarea=0;
 	for (i=0;i<retangulos.length;i++) //desenhando retangulos, pegando area total, pegando somatorio Xbarra.Area e Ybarra.Area
 	{
+		if(retangulos[i].invisi)
+		{
+			console.log(areatotal);
+			areatotal-= retangulos[i].area;
+			somaXarea-=retangulos[i].xbarra*retangulos[i].area;
+			somaYarea-=retangulos[i].ybarra*retangulos[i].area;
+		}else{
 		areatotal+= retangulos[i].area;
 		somaXarea+=retangulos[i].xbarra*retangulos[i].area;
 		somaYarea+=retangulos[i].ybarra*retangulos[i].area;
-	}
+	}}
 	for (i=0;i<triangulos.length;i++)
 	{
+		if(triangulos[i].invisi)
+		{
+		areatotal-= triangulos[i].area;
+		somaXarea-=triangulos[i].xbarra*triangulos[i].area;
+		somaYarea-=triangulos[i].ybarra*triangulos[i].area;
+		}
+		else{
 		areatotal+= triangulos[i].area;
 		somaXarea+=triangulos[i].xbarra*triangulos[i].area;
 		somaYarea+=triangulos[i].ybarra*triangulos[i].area;
-	}
+	}}
 
 	ybarra=somaYarea/areatotal;  //calculo ybarra
 	xbarra=somaXarea/areatotal;  //calculo xbarra
@@ -46,18 +60,33 @@ function calcularinercia()
 		Ixy = 0;
 		for (i=0;i<retangulos.length;i++)  //TEOREMA DOS EIXOS PARALELOS COM RETANGULOS
 		{
+			if (retangulos[i].invisi)
+			{
+				Ix -=retangulos[i].Ix+retangulos[i].area*(retangulos[i].ybarra-ybarra)**2; 
+				Iy -=retangulos[i].Iy+retangulos[i].area*(retangulos[i].xbarra-xbarra)**2;
+				Ixy -=retangulos[i].Ixy+retangulos[i].area*(-xbarra+retangulos[i].xbarra)*(ybarra-retangulos[i].ybarra); 
+			}
+			else{
 			Ix +=retangulos[i].Ix+retangulos[i].area*(retangulos[i].ybarra-ybarra)**2; 
 			Iy +=retangulos[i].Iy+retangulos[i].area*(retangulos[i].xbarra-xbarra)**2;
 			Ixy +=retangulos[i].Ixy+retangulos[i].area*(-xbarra+retangulos[i].xbarra)*(ybarra-retangulos[i].ybarra); 
-		}
+		}}
 
 
 		for (i=0;i<triangulos.length;i++)  //TEOREMA DOS EIXOS PARALELOS COM TRIANGULOS
-		{
+		{	
+			if (triangulos[i].invisi)
+			{
+
+			Ix -=triangulos[i].Ix+triangulos[i].area*(triangulos[i].ybarra-ybarra)**2;
+			Iy -=triangulos[i].Iy+triangulos[i].area*(triangulos[i].xbarra-xbarra)**2;
+			Ixy -=triangulos[i].Ixy+triangulos[i].area*(-xbarra+triangulos[i].xbarra)*(ybarra-triangulos[i].ybarra);
+			}
+			else{
 			Ix +=triangulos[i].Ix+triangulos[i].area*(triangulos[i].ybarra-ybarra)**2;
 			Iy +=triangulos[i].Iy+triangulos[i].area*(triangulos[i].xbarra-xbarra)**2;
 			Ixy +=triangulos[i].Ixy+triangulos[i].area*(-xbarra+triangulos[i].xbarra)*(ybarra-triangulos[i].ybarra);
-		}
+		}}
 		Imed = (Ix+Iy)/2;
 		R = Math.sqrt(((Ix-Iy)/2)**2+Ixy**2);
 		Imax = Imed+R;
