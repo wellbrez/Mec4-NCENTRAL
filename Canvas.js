@@ -23,7 +23,7 @@ var desy=0;
 var angulo = Math.PI/2;
 var final = false;
 var invisi = false;
-
+var botoesalt = []
 
 
 function setup()
@@ -35,8 +35,8 @@ function setup()
 	ybarra=height/2;
 	createCanvas(width,height);
 	noCursor();
-
-
+	botoesalt.push(new botaoalt(width-100,10,100,50,'invisi','Area negativa'));
+	botoesalt.push(new botaoalt(width-100,70,100,50,'final','Girar e mostrar'));
 }
 
 function draw()
@@ -45,6 +45,7 @@ function draw()
 	{
 
 		background('white')
+
 		push();
 		eixoscentrais();
 		stroke('black');
@@ -201,6 +202,10 @@ function draw()
 			}
 		}
 	}
+	for (i=0;i<botoesalt.length;i++)
+	{
+		botoesalt[i].draw();
+	}
 
 }
 function keyPressed()
@@ -350,4 +355,11 @@ function keyPressed()
 	}
 	calcularcentroide();
 	calcularinercia();
+}
+function mouseClicked()
+{
+	for (i=0;i<botoesalt.length;i++)
+	{
+		botoesalt[i].checarpressao();
+	}
 }
