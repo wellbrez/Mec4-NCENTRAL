@@ -1,0 +1,25 @@
+Crie uma pasta no seu PC
+Coloque todos os arquivos daqui na pasta
+Abra o arquivo Index.html com o navegador de sua preferência
+
+Para usar o programa, deve-se desenhar a figura com triângulos retângulos ou retângulos.
+
+Para a criação de retângulos, clique em (Retângulo), selecione dois pontos, de início e término, clicando na tela.
+
+Para a criação de triângulos, clique em (Triângulo), selecione um ponto de início, clicando na tela, depois arraste o mouse
+horizontalmente para definir a base do triângulo. Quando estiver do tamanho desejado, clique para selecionar.
+Após essa seleção, você deve indicar a altura do triângulo, arrastando o mouse verticalmente.
+
+Caso deseje desfazer algum passo, aperte Z.
+Caso deseje centralizar a tela, aperte S.
+Se você quiser remover uma área da figura, (adicionar área negativa), clique sobre o botão "Área negativa". Quando ele
+estiver verde significa que a área será computada como negativa. (Desenho também ficará branco)
+Ao finalizar o desenho, crie a envoltória, clicando nas extremidades da figura. (Veja a imagem de exemplo)
+
+Com a envoltória pronta, clique em "Girar e mostrar"
+O programa te dará os momentos de inércia principais: (Ixrodado) e (Iyrodado), junto com as coordenadas do ponto em relação
+ao centróide.
+Você pode usar as setinhas e o zoom (+/-) para conseguir ajustar melhor a figura à sua tela. 
+As coordenadas do centróide especificado são em relação ao centro da tela do programa.
+
+(Não desenhar enquanto o botão "Girar e mostrar" estiver ativo).

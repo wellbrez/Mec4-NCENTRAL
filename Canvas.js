@@ -24,7 +24,8 @@ var angulo = Math.PI/2;
 var final = false;
 var invisi = false;
 var botoesalt = []
-
+var botoesdes = []
+var acionar = 'none';
 
 function setup()
 {
@@ -37,6 +38,15 @@ function setup()
 	noCursor();
 	botoesalt.push(new botaoalt(width-100,10,100,50,'invisi','Area negativa'));
 	botoesalt.push(new botaoalt(width-100,70,100,50,'final','Girar e mostrar'));
+	botoesdes.push(new botaodes(width-100,130,100,50,'triangulo','Triangulo'));
+	botoesdes.push(new botaodes(width-100,190,100,50,'retangulo','Retangulo'));
+	botoesdes.push(new botaodes(width-100,250,100,50,'linha','Envoltoria'));
+	botoesdes.push(new botaosf(width-100,310,33,50,'aumentar','+'));
+	botoesdes.push(new botaosf(width-33,310,33,50,'diminuir','-'));
+	botoesdes.push(new botaosf(width-67,310,33,50,'cima','↑'));
+	botoesdes.push(new botaosf(width-67,370,33,50,'baixo','↓'));
+	botoesdes.push(new botaosf(width-100,370,33,50,'esquerda','←'));
+	botoesdes.push(new botaosf(width-33,370,33,50,'direita','→'));
 }
 
 function draw()
@@ -82,7 +92,20 @@ function draw()
 			textofixo("CONTORNO",10,90,15,2);
 			pop();
 		}
-		
+		for (i=0;i<botoesalt.length;i++)
+	{
+
+		strokeWeight(1);
+		textSize(12)
+		botoesalt[i].draw();
+	}
+	for (i=0;i<botoesdes.length;i++)
+	{
+
+		strokeWeight(1);
+		textSize(12)
+		botoesdes[i].draw();
+	}
 		scale(escala);
 		translate(desx/escala,desy/escala);
 		cross();
@@ -165,7 +188,13 @@ function draw()
 		stroke('black');
 
 		
-
+		if (status == 'notdrawing')
+		{
+			for (i=0;i<botoesdes.length;i++)
+			{
+				botoesdes[i].pressed = false;
+			}
+		}
 	
 		if (status=='drawingrec')
 		{
@@ -202,10 +231,7 @@ function draw()
 			}
 		}
 	}
-	for (i=0;i<botoesalt.length;i++)
-	{
-		botoesalt[i].draw();
-	}
+	
 
 }
 function keyPressed()
@@ -251,7 +277,14 @@ function keyPressed()
 			linhas.push(new linha(memorypoints[0],memorypoints[1],MX(),MY()));
 
 			historico.push('linha');
-			status='notdrawing';
+			if (linha[0].pontos[0]==MX() && linha[0].pontos[1]==MY())
+			{
+				status = 'linha';
+			}
+			else
+			{
+				status='notdrawing';
+			}
 		}
 	}
 	//
@@ -358,8 +391,129 @@ function keyPressed()
 }
 function mouseClicked()
 {
-	for (i=0;i<botoesalt.length;i++)
-	{
-		botoesalt[i].checarpressao();
-	}
+
+		
+		if (!TemBotaoApertado())
+		{
+			switch(status)
+		{
+		
+		case 'triangulo':
+
+			memorypoints = [MX(),MY()];
+			status = 'drawingtristart'
+			break;
+
+		case 'drawingtristart':
+			if (Math.abs(memorypoints[0]-MX())>Math.abs(memorypoints[1]-MY()))
+			{
+				memorypoints.push(MX());
+				memorypoints.push(memorypoints[1]);
+			}
+			else
+			{
+				memorypoints.push(memorypoints[0]);
+				memorypoints.push(MY());
+			}
+			status = 'drawingtriend';
+			break;
+
+		case 'drawingtriend':
+			if (Math.abs(MX()-memorypoints[0])>Math.abs(MX()-memorypoints[2]))
+			{
+				triangulos.push(new triangulo(memorypoints[0],memorypoints[1],memorypoints[2],memorypoints[3],memorypoints[2],MY()));
+				triangulos[triangulos.length-1].invisi = invisi;
+			}
+			else
+			{
+				triangulos.push(new triangulo(memorypoints[0],memorypoints[1],memorypoints[2],memorypoints[3],memorypoints[0],MY()));
+				triangulos[triangulos.length-1].invisi = invisi;
+			}
+			historico.push('triangulo');
+			status='notdrawing';
+			break;
+
+		case 'retangulo':
+			memorypoints = [MX(),MY()];
+			status = 'drawingrec';
+			break;
+
+		case 'drawingrec':
+			retangulos.push(new retangulo(memorypoints[0],memorypoints[1],MX(),MY()));
+			retangulos[retangulos.length-1].invisi = invisi;
+			historico.push('retangulo');
+			status = 'notdrawing';
+			break;
+
+		case 'linha':
+		
+			memorypoints = [MX(),MY()];
+			status = 'drawingline';
+			break;
+		
+		case 'drawingline':
+			linhas.push(new linha(memorypoints[0],memorypoints[1],MX(),MY()));
+
+			memorypoints = [MX(),MY()];
+			historico.push('linha');
+			if (linhas[0].pontos[0]==MX() && linhas[0].pontos[1]==MY())
+			{
+				status = 'notdrawing';
+			}
+			else
+			{
+
+			status='drawingline';
+			}
+			break;
+
+
+		}
+		}
+		switch (acionar)
+		{
+			case 'centralizar':
+			escala = 1;
+			desx=0;
+			desy=0;
+			angulo = 0;
+			acionar = 'none'
+			break
+			case 'diminuir':
+			escala-=0.1;
+			acionar = 'none'
+			break
+			case 'aumentar':
+			escala+=0.1;
+			acionar = 'none'
+			break
+			case 'cima':
+			desy+=100;
+			acionar = 'none'
+			break
+			case 'baixo':
+			desy-=100;
+			acionar = 'none'
+			break
+			case 'esquerda':
+			desx+=100;
+			acionar = 'none'
+			break
+			case 'direita':
+			desx-=100;
+			acionar = 'none'
+			break
+
+			
+		}
+		
+	calcularcentroide();
+	calcularinercia();
+
+
+			
+	
+
+	
+
 }
