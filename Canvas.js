@@ -29,6 +29,9 @@ var acionar = 'none';
 
 function setup()
 {
+	inputIx = createInput();
+	inputIy = createInput();
+	inputA = createInput();
 	width = arredonda20(windowWidth*0.9);
 	height = arredonda20(windowHeight*0.9);
 

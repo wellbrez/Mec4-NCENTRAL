@@ -118,6 +118,15 @@ function calcularinercia()
 				Iynew = Imax;
 				Ixnew = Imin;
 			}
-		}
+		
+	}
+	if (inputIy.value()!="" && inputIx.value()!="")
+	{
+
+		Ixnew = parseFloat(inputIx.value());
+		Iynew = parseFloat(inputIy.value());
+		areatotal = parseFloat(inputA.value());
+
+	}
 
 }
